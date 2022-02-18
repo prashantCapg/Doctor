@@ -2,6 +2,8 @@ package com.doctor.project;
 import java.util.List;
 import java.util.Optional;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,16 +39,18 @@ public class Controller {
 		return new ResponseEntity(svl.getDocLarLength(), HttpStatus.OK);
 	}
 	@PostMapping("/addDoctorNameWithGivenDegree")
-	public ResponseEntity addDoctor(@RequestBody DoctorClass data) {
+	public ResponseEntity addDoctor(@Valid@RequestBody Doctor data) {
+		
 		/*
 		 * if(data.getDegree().isEmpty()) { throw new
 		 * DegreeEmptyException("Degree shouldn't be empty"); }
 		 */
-		return new ResponseEntity(svl.addd(data),HttpStatus.OK);
+		 
+		return new ResponseEntity(svl.addd(data),HttpStatus.CREATED);
 	}
 	@PostMapping("/addDoctorWithNonEmptyDegree")
-	public ResponseEntity addDoctor1(@RequestBody DoctorClass data)  {
-		return new ResponseEntity(svl.addd1(data), HttpStatus.OK);
+	public ResponseEntity addDoctor1(@Valid@RequestBody Doctor data) throws Exception   {
+		return new ResponseEntity(svl.addd1(data), HttpStatus.CREATED);
 	}
 	
 	@DeleteMapping("/deleteAll")
@@ -58,11 +62,11 @@ public class Controller {
 		return new ResponseEntity(svl.delParDat(Deg), HttpStatus.OK);
 	}
 	@PutMapping("/updateDoctorName/{Name}")
-	public ResponseEntity<DoctorClass> updateDocName(@RequestBody DoctorClass data,@PathVariable("Name") String str) {
+	public ResponseEntity<Doctor> updateDocName(@Valid@RequestBody Doctor data,@PathVariable("Name") String str) {
 		return new ResponseEntity(svl.updaDocNa(data,str), HttpStatus.OK);
 	}
 	@PutMapping("/updateDocAndDegName/{Name}")
-	public ResponseEntity<DoctorClass> updateDocDeg(@RequestBody DoctorClass data, @PathVariable("Name") String str){
+	public ResponseEntity<Doctor> updateDocDeg(@Valid@RequestBody Doctor data, @PathVariable("Name") String str){
 		return new ResponseEntity(svl.updateDoctorDeg(data, str), HttpStatus.OK);
 	}
 	

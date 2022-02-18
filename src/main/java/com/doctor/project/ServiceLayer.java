@@ -1,8 +1,6 @@
 package com.doctor.project;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -19,47 +17,50 @@ public class ServiceLayer {
 	@Autowired
 	Repository repo;
 
-	public List<DoctorClass> getDoctors(String str) {
+	public List<Doctor> getDoctors(String str) {
 		
-		List<DoctorClass> D = repo.findAll();
+		List<Doctor> D = repo.findAll();
 		return D.stream().filter(temp->temp.getSpecialities().equalsIgnoreCase(str)).collect(Collectors.toList());
 		
 		
 	}
-
-	public DoctorClass addd(DoctorClass data) {
+	//this method add data if 
+	public Doctor addd(Doctor data) throws DegreeEmptyException{
 		List<String> dList = Arrays.asList("MS","MBBS and MD","Surgeon","MS","MCH");
 	    if(dList.contains(data.getDegree())) {
 	    	return repo.save(data);
 	    }else {
-	    	throw new DegreeEmptyException("error");
+	    	throw new DegreeEmptyException("Degree Can not be empty or enter correct degree");
 	    }
 	}
-	public String addd1(DoctorClass data)  {
+	//this method add data in a table only if assigned degree matches with the given degree list
+	public String addd1(Doctor data) throws Exception, DegreeEmptyException  {
 		List<String> dList = Arrays.asList("MS","MBBS and MD","Surgeon","MS","MCH");
 		
 		if(dList.contains(data.getDegree())) {
-	    	repo.save(data);
-	    }else {
-	    	if((data.getDegree().isEmpty())) {
-	    		return "degree is empty";
-	    	}
+	    	 repo.save(data);
+	    }else if(data.getDegree().isEmpty()) {
+	    	throw new DegreeEmptyException("Degree Can not be empty");
+	    }
+		else {
+			
+	    	throw new DegreeNotFoundException("Degree should be in the given list");
 	    }
 		
-		return "data added successfully";
+		return "New Doctor is added successfully";
 		
 		
 		
 		
 	}
-
-	public List<DoctorClass> getAlpha(String str) {
-		List<DoctorClass> D = repo.findAll();
+	//this method fetch the data with the first letter of doctor name
+	public List<Doctor> getAlpha(String str) {
+		List<Doctor> D = repo.findAll();
 		return D.stream().filter(temp->temp.getDoctorName().startsWith(str)).collect(Collectors.toList());
 	}
-
-	public Optional<DoctorClass> getDocLarLength() {
-		List<DoctorClass> D = repo.findAll();
+	//this method returns a Doctor name with longest length
+	public Optional<Doctor> getDocLarLength() {
+		List<Doctor> D = repo.findAll();
 		
 		return D.stream().max(Comparator.comparingInt(t->t.getDoctorName().length()));
 		
@@ -67,28 +68,28 @@ public class ServiceLayer {
 		//return a;
 		//.max(Comparator.comparingInt(t->t.getDoctorName().length()));
 	}
-
-	public List<DoctorClass> getDoc() {
+	//this method fetch all the current data
+	public List<Doctor> getDoc() {
 		return repo.findAll();
 	}
-
+	//this method delete all data in a given list
 	public String deleDat() {
 		repo.deleteAll();
 		return "successfully deleted data";
 	}
-
+	//this method delete doctors name with given degree 
 	public String delParDat(String deg) {
-		List<DoctorClass> DC = repo.findAll();
-		for(DoctorClass var : DC) {
+		List<Doctor> DC = repo.findAll();
+		for(Doctor var : DC) {
 			if(var.getDegree().equalsIgnoreCase(deg)) {
 				repo.delete(var);
 			}
 		}
 		return "doctor with given degree deleted";
 	}
-
-	public List<DoctorClass> updaDocNa(DoctorClass data, String s) {
-		List<DoctorClass> Doc = repo.findAll();
+	//this method update Doctor name in the list.
+	public String updaDocNa(Doctor data, String s) {
+		List<Doctor> Doc = repo.findAll();
 		Doc = Doc.stream().map(temp->{
 			if(temp.getDoctorName().equals(s)) {
 				temp.setDoctorName(data.getDoctorName());
@@ -97,13 +98,13 @@ public class ServiceLayer {
 			return temp;
 		}).collect(Collectors.toList()); 
 		repo.saveAll(Doc);
-		return Doc;
+		return "Doctor name is updated";
 		
 	}
 
-	
-	public List<DoctorClass> updateDoctorDeg(DoctorClass data, String s) {
-		List<DoctorClass> Doc = repo.findAll();
+	//this method update Doctor name with degree.
+	public String updateDoctorDeg(Doctor data, String s) {
+		List<Doctor> Doc = repo.findAll();
 		Doc = Doc.stream().map(temp->{
 			if(temp.getDoctorName().equals(s)) {
 				temp.setDoctorName(data.getDoctorName());
@@ -112,7 +113,8 @@ public class ServiceLayer {
 			return temp;
 		}).collect(Collectors.toList()); 
 		repo.saveAll(Doc);
-		return Doc;
+		
+		return "list is updated with current doctor and degree";
 		
 	}
 	
