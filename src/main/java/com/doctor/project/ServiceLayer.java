@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.MultiValueMap;
 
 @Service
 public class ServiceLayer {
@@ -30,9 +31,9 @@ public class ServiceLayer {
 		List<String> dList = Arrays.asList("MS","MBBS and MD","Surgeon","MS","MCH");
 	    if(dList.contains(data.getDegree())) {
 	    	return repo.save(data);
+	    }else {
+	    	throw new DegreeEmptyException("error");
 	    }
-		
-	    return null;
 	}
 	public String addd1(DoctorClass data)  {
 		List<String> dList = Arrays.asList("MS","MBBS and MD","Surgeon","MS","MCH");
@@ -59,10 +60,12 @@ public class ServiceLayer {
 
 	public Optional<DoctorClass> getDocLarLength() {
 		List<DoctorClass> D = repo.findAll();
-		return  D.stream().max(Comparator.comparingInt(t->t.getDoctorName().length()));
+		
+		return D.stream().max(Comparator.comparingInt(t->t.getDoctorName().length()));
+		
 		//DoctorClass a = Collections.max(D, Comparator.comparing(obj -> obj.getDoctorName().length()));
 		//return a;
-		
+		//.max(Comparator.comparingInt(t->t.getDoctorName().length()));
 	}
 
 	public List<DoctorClass> getDoc() {
@@ -83,6 +86,36 @@ public class ServiceLayer {
 		}
 		return "doctor with given degree deleted";
 	}
+
+	public List<DoctorClass> updaDocNa(DoctorClass data, String s) {
+		List<DoctorClass> Doc = repo.findAll();
+		Doc = Doc.stream().map(temp->{
+			if(temp.getDoctorName().equals(s)) {
+				temp.setDoctorName(data.getDoctorName());
+				
+			}
+			return temp;
+		}).collect(Collectors.toList()); 
+		repo.saveAll(Doc);
+		return Doc;
+		
+	}
+
+	
+	public List<DoctorClass> updateDoctorDeg(DoctorClass data, String s) {
+		List<DoctorClass> Doc = repo.findAll();
+		Doc = Doc.stream().map(temp->{
+			if(temp.getDoctorName().equals(s)) {
+				temp.setDoctorName(data.getDoctorName());
+				temp.setDegree(data.getDegree());
+			}
+			return temp;
+		}).collect(Collectors.toList()); 
+		repo.saveAll(Doc);
+		return Doc;
+		
+	}
+	
 
 	
 

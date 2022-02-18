@@ -15,6 +15,22 @@ public class DoctorClass {
 	private String doctorName;
 	private String degree;
 	private String specialities;
+	public DoctorClass() {
+		
+	}
+	public DoctorClass(Integer id, String doctorName, String degree, String specialities) {
+		//super();
+		this.id = id;
+		this.doctorName = doctorName;
+		this.degree = degree;
+		this.specialities = specialities;
+	}
+	public Integer getId() {
+		return id;
+	}
+	public void setId(Integer id) {
+		this.id = id;
+	}
 	public String getDoctorName() {
 		return doctorName;
 	}
@@ -34,10 +50,12 @@ public class DoctorClass {
 		this.specialities = specialities;
 	}
 	
-	
 	@Override
 	public String toString() {
-		return "DoctorClass [doctorName=" + doctorName + ", degree=" + degree + ", specialities=" + specialities + "]";
+		return "DoctorClass [id=" + id + ", doctorName=" + doctorName + ", degree=" + degree + ", specialities="
+				+ specialities + "]";
 	}
+	
+	
 
 }
