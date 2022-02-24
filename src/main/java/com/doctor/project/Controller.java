@@ -23,7 +23,7 @@ public class Controller {
 	ServiceLayer svl;
 	
 	@GetMapping("/getAllDoctor")
-	public ResponseEntity getDoctor(){
+	public ResponseEntity getDoctor() throws DataIsEmptyException{
 		return new ResponseEntity(svl.getDoc(),HttpStatus.OK);
 	}
 	@GetMapping("/getDoctorDetailsOfParticularDegree/{str}")

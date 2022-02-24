@@ -16,7 +16,12 @@ public class ServiceLayer {
 	
 	@Autowired
 	Repository repo;
+	
+	public void setRepo(Repository repo) {
+		this.repo = repo;
+	}
 
+	//this method fetch doctor with particular specialties
 	public List<Doctor> getDoctors(String str) {
 		
 		List<Doctor> D = repo.findAll();
@@ -24,7 +29,7 @@ public class ServiceLayer {
 		
 		
 	}
-	//this method add data if 
+	
 	public Doctor addd(Doctor data) throws DegreeEmptyException{
 		List<String> dList = Arrays.asList("MS","MBBS and MD","Surgeon","MS","MCH");
 	    if(dList.contains(data.getDegree())) {
@@ -69,8 +74,12 @@ public class ServiceLayer {
 		//.max(Comparator.comparingInt(t->t.getDoctorName().length()));
 	}
 	//this method fetch all the current data
-	public List<Doctor> getDoc() {
-		return repo.findAll();
+	public List<Doctor> getDoc() throws DataIsEmptyException {
+		if(repo.findAll().isEmpty()) {
+			throw new DataIsEmptyException("Data is empty");
+		}else {
+			return repo.findAll();
+		}
 	}
 	//this method delete all data in a given list
 	public String deleDat() {
