@@ -31,11 +31,11 @@ public class ServiceLayer {
 	}
 	
 	public Doctor addd(Doctor data) throws DegreeEmptyException{
-		List<String> dList = Arrays.asList("MS","MBBS and MD","Surgeon","MS","MCH");
+		List<String> dList = Arrays.asList("MS","MBBS and MD","Surgeon","MS","MCH","MD");
 	    if(dList.contains(data.getDegree())) {
 	    	return repo.save(data);
 	    }else {
-	    	throw new DegreeEmptyException("Degree Can not be empty or enter correct degree");
+	    	throw new DegreeEmptyException("Enter correct degree");
 	    }
 	}
 	//this method add data in a table only if assigned degree matches with the given degree list
@@ -61,6 +61,7 @@ public class ServiceLayer {
 	//this method fetch the data with the first letter of doctor name
 	public List<Doctor> getAlpha(String str) {
 		List<Doctor> D = repo.findAll();
+		
 		return D.stream().filter(temp->temp.getDoctorName().startsWith(str)).collect(Collectors.toList());
 	}
 	//this method returns a Doctor name with longest length

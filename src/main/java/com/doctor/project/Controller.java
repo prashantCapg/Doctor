@@ -26,12 +26,12 @@ public class Controller {
 	public ResponseEntity getDoctor() throws DataIsEmptyException{
 		return new ResponseEntity(svl.getDoc(),HttpStatus.OK);
 	}
-	@GetMapping("/getDoctorDetailsOfParticularDegree/{str}")
+	@GetMapping("/getDoctorDetailsOfParticularSpecialities/{str}")
 	public ResponseEntity getAllDoctors(@PathVariable String str){
 		return new ResponseEntity(svl.getDoctors(str),HttpStatus.OK);
 	}
 	@GetMapping("/startWithAlphabet/{str}")
-	public ResponseEntity getDocAlpha(@PathVariable String str){
+	public ResponseEntity getDocAlpha(@PathVariable String str) {
 		return new ResponseEntity(svl.getAlpha(str),HttpStatus.OK);
 	}
 	@GetMapping("/getDoctorOfLongestLength")
