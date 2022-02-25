@@ -39,7 +39,7 @@ public class DoctorServiceTest {
 	@Test
 	void showAllSuccessTest() throws DataIsEmptyException {
 		when(repo.findAll()).thenReturn(Arrays.asList(new Doctor(1,"prashant","MD","Medicine")));
-		List<Doctor> docList = service.getDoc();
+		List<Doctor> docList = service.getDoctor();
 		assertFalse(docList.isEmpty());
 		assertEquals(1, docList.size());
 	

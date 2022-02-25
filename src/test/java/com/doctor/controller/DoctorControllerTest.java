@@ -44,7 +44,7 @@ public class DoctorControllerTest {
 	//when(service.showAll()).thenReturn(l);
 	mockMvc.perform(get("/getAllDoctor"))
 	.andExpect(status().isOk());
-	verify(service,times(1)).getDoc();
+	verify(service,times(1)).getDoctor();
 
 
 
@@ -52,13 +52,14 @@ public class DoctorControllerTest {
 	
 	  @Test void showDoctorTestError() throws Exception { 
 	  
-		  when(service.getDoc().isEmpty()).thenThrow(DataIsEmptyException.class);
-		  mockMvc.perform(get("/getAllDoctor"))
+			/*
+			 * when(service.getDoc().isEmpty()).thenThrow(DataIsEmptyException.class);
+			 */		  mockMvc.perform(get("/getAllDoctor"))
 		  .andExpect(status().is4xxClientError())
 		  .andExpect(result ->
 		  assertTrue(result.getResolvedException() instanceof DataIsEmptyException));
 		   
-		  verify(service,times(1)).getDoc();
+		  verify(service,times(1)).getDoctor();
 	  
 	  
 	  }
