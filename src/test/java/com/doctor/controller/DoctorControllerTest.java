@@ -1,6 +1,5 @@
 package com.doctor.controller;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -13,15 +12,17 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
-import com.doctor.project.*;
 /*import com.doctor.project.Doctor;
 import com.doctor.project.ServiceLayer;*/
+import com.doctor.project.Doctor;
+import com.doctor.project.DoctorApplication;
+import com.doctor.project.ServiceLayer;
+import com.doctor.project.Exception.DataIsEmptyException;
 
 //@SpringBootConfiguration
 @SpringBootTest(classes = DoctorApplication.class)

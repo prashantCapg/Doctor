@@ -1,4 +1,4 @@
-package com.doctor.project;
+package com.doctor.project.Exception;
 
 import java.time.LocalDate;
 import java.util.Date;

@@ -1,4 +1,4 @@
-package com.doctor.project;
+package com.doctor.project.Exception;
 
 import java.util.Date;
 import java.util.List;
@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 @ControllerAdvice
 public class AppExceptionHandler {
@@ -31,7 +30,7 @@ public class AppExceptionHandler {
 		
 		 
 		ErrorMessage errorMessage = new ErrorMessage(ex.getMessage(), new Date());
-		return new ResponseEntity(errorMessage, HttpStatus.INTERNAL_SERVER_ERROR);
+		return new ResponseEntity(errorMessage, HttpStatus.NOT_FOUND);
 	}
 	@ExceptionHandler(value = {DegreeNotFoundException.class})
 	public ResponseEntity<?> handleEmptyException(DegreeNotFoundException ex, WebRequest request){
@@ -60,14 +59,14 @@ public class AppExceptionHandler {
 		ErrorMessage errorMessage = new ErrorMessage(ex.getMessage(), new Date());
 		return new ResponseEntity(errorMessage, HttpStatus.BAD_REQUEST);
 	}
-	/*
-	 * @ExceptionHandler(value = {NameNotFoundException.class}) public
-	 * ResponseEntity<?> handleUserServiceExceptionOfName(NameNotFoundException ex){
-	 * 
-	 * 
-	 * 
-	 * ErrorMessage errorMessage = new ErrorMessage(ex.getMessage(), new Date());
-	 * return new ResponseEntity(errorMessage, HttpStatus.NOT_FOUND); }
-	 */
+	
+	  @ExceptionHandler(value = {NameNotFoundException.class}) public
+	  ResponseEntity<?> handleUserServiceExceptionOfName(NameNotFoundException ex){
+	  
+	  
+	  
+	  ErrorMessage errorMessage = new ErrorMessage(ex.getMessage(), new Date());
+	  return new ResponseEntity(errorMessage, HttpStatus.NOT_FOUND); }
+	 
 	
 }

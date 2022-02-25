@@ -9,18 +9,16 @@ import static org.mockito.Mockito.when;
 import java.util.Arrays;
 import java.util.List;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import com.doctor.project.DataIsEmptyException;
 import com.doctor.project.Doctor;
 import com.doctor.project.Repository;
 import com.doctor.project.ServiceLayer;
+import com.doctor.project.Exception.DataIsEmptyException;
 @SpringBootConfiguration
 @SpringBootTest
 public class DoctorServiceTest {

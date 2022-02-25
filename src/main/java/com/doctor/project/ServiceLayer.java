@@ -1,36 +1,79 @@
 package com.doctor.project;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.MultiValueMap;
+
+import com.doctor.project.Exception.DataIsEmptyException;
+import com.doctor.project.Exception.DegreeEmptyException;
+import com.doctor.project.Exception.DegreeNotFoundException;
+import com.doctor.project.Exception.NameNotFoundException;
 
 @Service
 public class ServiceLayer {
 	
-	@Autowired
-	Repository repo;
-	
-	public void setRepo(Repository repo) {
-		this.repo = repo;
-	}
-
+		@Autowired
+		Repository repo;
+		
+		public void setRepo(Repository repo) {
+			this.repo = repo;
+		}
+	//this method fetch all the current data
+		public List<Doctor> getDoctor() throws DataIsEmptyException  {
+			if(repo.findAll().isEmpty()) {
+				throw new DataIsEmptyException("Data is empty");
+			}else {
+				return repo.findAll();
+			}
+		}
+		public List<Doctor> getDoctorWithGivenAlphabet(String str) throws NameNotFoundException, DataIsEmptyException{
+			List<Doctor> D = repo.findAll();
+			//List<Doctor> filterData = new ArrayList<Doctor>();
+			if(repo.findAll().isEmpty()) {
+				throw new DataIsEmptyException("List is Empty");
+			}else {
+				
+				List<Doctor> filterData = D.stream().filter(temp->temp.getDoctorName().startsWith(str)).collect(Collectors.toList());
+				if(filterData.isEmpty()) {
+					throw new NameNotFoundException("Name not found");
+				}else {
+					return filterData;
+				}
+			}
+		}
 	//this method fetch doctor with particular specialties
-	public List<Doctor> getDoctors(String str) {
+	public List<Doctor> getDoctorOfGivenSpecialities(String str) {
 		
 		List<Doctor> D = repo.findAll();
 		return D.stream().filter(temp->temp.getSpecialities().equalsIgnoreCase(str)).collect(Collectors.toList());
 		
 		
 	}
+	public List<Doctor> getDoctorLargestLength() {
+		List<Doctor> D = repo.findAll();
+		int longest = 0;
+		for(Doctor temp: D ) {
+			longest = Math.max(longest,temp.getDoctorName().length());
+		}
+		List<Doctor> result = new ArrayList<Doctor>();
+		
+		for(Doctor temp: D) {
+			if(temp.getDoctorName().length()==longest) {
+				result.add(temp);
+			}
+		}
+		return result;
+	}
+		
 	
-	public Doctor addd(Doctor data) throws DegreeEmptyException{
+	public Doctor addDoctorWithGivenDegree(Doctor data) throws DegreeEmptyException{
 		List<String> dList = Arrays.asList("MS","MBBS and MD","Surgeon","MS","MCH","MD");
 	    if(dList.contains(data.getDegree())) {
 	    	return repo.save(data);
@@ -39,7 +82,7 @@ public class ServiceLayer {
 	    }
 	}
 	//this method add data in a table only if assigned degree matches with the given degree list
-	public String addd1(Doctor data) throws Exception, DegreeEmptyException  {
+	public String addDoctorWithNonEmptyDegree(Doctor data) throws Exception, DegreeEmptyException  {
 		List<String> dList = Arrays.asList("MS","MBBS and MD","Surgeon","MS","MCH");
 		
 		if(dList.contains(data.getDegree())) {
@@ -58,47 +101,40 @@ public class ServiceLayer {
 		
 		
 	}
-	//this method fetch the data with the first letter of doctor name
-	public List<Doctor> getAlpha(String str) {
-		List<Doctor> D = repo.findAll();
-		
-		return D.stream().filter(temp->temp.getDoctorName().startsWith(str)).collect(Collectors.toList());
-	}
-	//this method returns a Doctor name with longest length
-	public Optional<Doctor> getDocLarLength() {
-		List<Doctor> D = repo.findAll();
-		
-		return D.stream().max(Comparator.comparingInt(t->t.getDoctorName().length()));
-		
-		//DoctorClass a = Collections.max(D, Comparator.comparing(obj -> obj.getDoctorName().length()));
-		//return a;
-		//.max(Comparator.comparingInt(t->t.getDoctorName().length()));
-	}
-	//this method fetch all the current data
-	public List<Doctor> getDoc() throws DataIsEmptyException {
+	
+	
+	
+	
+	//this method delete all data in a given list
+	public String deleteAllData() throws DataIsEmptyException  {
 		if(repo.findAll().isEmpty()) {
 			throw new DataIsEmptyException("Data is empty");
 		}else {
-			return repo.findAll();
-		}
-	}
-	//this method delete all data in a given list
-	public String deleDat() {
-		repo.deleteAll();
+			repo.deleteAll();
 		return "successfully deleted data";
+		}
+		
 	}
 	//this method delete doctors name with given degree 
-	public String delParDat(String deg) {
+	public String deleteDoctorWithGivenDegree(String deg) throws DegreeNotFoundException, DataIsEmptyException {
 		List<Doctor> DC = repo.findAll();
-		for(Doctor var : DC) {
-			if(var.getDegree().equalsIgnoreCase(deg)) {
-				repo.delete(var);
+		
+		if(repo.findAll().isEmpty()) {
+			throw new DataIsEmptyException("Data is empty");
+		}else {
+			List<Doctor> result = DC.stream().filter(temp->temp.getDegree().equalsIgnoreCase(deg)).collect(Collectors.toList());
+			if(result.isEmpty()) {
+				throw new DegreeNotFoundException("Degree is not in the list");
+			}else {
+				repo.deleteAll(result);
+				return "doctor with given degree deleted";
 			}
 		}
-		return "doctor with given degree deleted";
+		
+		
 	}
 	//this method update Doctor name in the list.
-	public String updaDocNa(Doctor data, String s) {
+	public String updaDoctorName(Doctor data, String s) {
 		List<Doctor> Doc = repo.findAll();
 		Doc = Doc.stream().map(temp->{
 			if(temp.getDoctorName().equals(s)) {
@@ -113,7 +149,7 @@ public class ServiceLayer {
 	}
 
 	//this method update Doctor name with degree.
-	public String updateDoctorDeg(Doctor data, String s) {
+	public String updateDoctorAndDegreeName(Doctor data, String s) {
 		List<Doctor> Doc = repo.findAll();
 		Doc = Doc.stream().map(temp->{
 			if(temp.getDoctorName().equals(s)) {
