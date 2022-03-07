@@ -1,13 +1,13 @@
 package com.doctor.project.Exception;
 
-public class NameNotFoundException extends Exception {
+public class DataNotFoundException extends RuntimeException {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public NameNotFoundException(String message) {
+	public DataNotFoundException(String message) {
 		super(message);
 	}
 }

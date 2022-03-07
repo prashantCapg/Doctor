@@ -1,6 +1,6 @@
 package com.doctor.project.Exception;
 
-public class DataIsEmptyException extends Exception{
+public class DataIsEmptyException extends RuntimeException{
 
 	/**
 	 * 

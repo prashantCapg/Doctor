@@ -60,8 +60,8 @@ public class AppExceptionHandler {
 		return new ResponseEntity(errorMessage, HttpStatus.BAD_REQUEST);
 	}
 	
-	  @ExceptionHandler(value = {NameNotFoundException.class}) public
-	  ResponseEntity<?> handleUserServiceExceptionOfName(NameNotFoundException ex){
+	  @ExceptionHandler(value = {DataNotFoundException.class}) public
+	  ResponseEntity<?> handleUserServiceExceptionOfName(DataNotFoundException ex){
 	  
 	  
 	  

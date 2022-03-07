@@ -1,6 +1,6 @@
 package com.doctor.project.Exception;
 
-public class DegreeNotFoundException extends Exception {
+public class DegreeNotFoundException extends RuntimeException {
 	
 
 	
