@@ -1,6 +1,5 @@
 package com.doctor.project;
-import java.util.List;
-import java.util.Optional;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,60 +10,69 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.doctor.project.Exception.DataIsEmptyException;
+import com.doctor.project.Exception.DegreeNotFoundException;
+import com.doctor.project.Exception.DataNotFoundException;
 
 @RestController
 public class Controller {
 	@Autowired
 	ServiceLayer svl;
-	
+
 	@GetMapping("/getAllDoctor")
-	public ResponseEntity getDoctor(){
-		return new ResponseEntity(svl.getDoc(),HttpStatus.OK);
+	public ResponseEntity getDoctor() throws DataIsEmptyException {
+		return new ResponseEntity(svl.getDoctor(), HttpStatus.OK);
 	}
-	@GetMapping("/getDoctorDetailsOfParticularDegree/{str}")
-	public ResponseEntity getAllDoctors(@PathVariable String str){
-		return new ResponseEntity(svl.getDoctors(str),HttpStatus.OK);
+
+	@GetMapping("/getDoctorDetailsOfParticularSpecialities/{str}")
+	public ResponseEntity getDoctorOfGivenSpecialities(@PathVariable String str) {
+		return new ResponseEntity(svl.getDoctorOfGivenSpecialities(str), HttpStatus.OK);
 	}
+
 	@GetMapping("/startWithAlphabet/{str}")
-	public ResponseEntity getDocAlpha(@PathVariable String str){
-		return new ResponseEntity(svl.getAlpha(str),HttpStatus.OK);
+	public ResponseEntity getDoctorWithGivenAlphabet(@PathVariable String str)
+			throws DataNotFoundException, DataIsEmptyException {
+		return new ResponseEntity(svl.getDoctorWithGivenAlphabet(str), HttpStatus.OK);
 	}
+
 	@GetMapping("/getDoctorOfLongestLength")
-	public ResponseEntity getDocLarLen() {
-		return new ResponseEntity(svl.getDocLarLength(), HttpStatus.OK);
+	public ResponseEntity getDoctorLargestLength() {
+		return new ResponseEntity(svl.getDoctorLargestLength(), HttpStatus.OK);
 	}
+
 	@PostMapping("/addDoctorNameWithGivenDegree")
-	public ResponseEntity addDoctor(@RequestBody DoctorClass data) {
-		/*
-		 * if(data.getDegree().isEmpty()) { throw new
-		 * DegreeEmptyException("Degree shouldn't be empty"); }
-		 */
-		return new ResponseEntity(svl.addd(data),HttpStatus.OK);
+	public ResponseEntity addDoctorWithGivenDegree(@Valid @RequestBody Doctor data) {
+
+		return new ResponseEntity(svl.addDoctorWithGivenDegree(data), HttpStatus.CREATED);
 	}
+
 	@PostMapping("/addDoctorWithNonEmptyDegree")
-	public ResponseEntity addDoctor1(@RequestBody DoctorClass data)  {
-		return new ResponseEntity(svl.addd1(data), HttpStatus.OK);
+	public ResponseEntity addDoctorWithNonEmptyDegree(@Valid @RequestBody Doctor data) throws Exception {
+		return new ResponseEntity(svl.addDoctorWithNonEmptyDegree(data), HttpStatus.CREATED);
 	}
-	
+
 	@DeleteMapping("/deleteAll")
-	public ResponseEntity deleteData() {
-		return new ResponseEntity(svl.deleDat(), HttpStatus.OK);
+	public ResponseEntity deleteData() throws DataIsEmptyException {
+		return new ResponseEntity(svl.deleteAllData(), HttpStatus.OK);
 	}
-	@DeleteMapping("/deleteByDegree/{Deg}")
-	public ResponseEntity deletePartData(@PathVariable String Deg) {
-		return new ResponseEntity(svl.delParDat(Deg), HttpStatus.OK);
+
+	@DeleteMapping("/deleteByDegree/{Degree}")
+	public ResponseEntity deletePartData(@PathVariable String Degree)
+			throws DegreeNotFoundException, DataIsEmptyException {
+		return new ResponseEntity(svl.deleteDoctorWithGivenDegree(Degree), HttpStatus.OK);
 	}
+
 	@PutMapping("/updateDoctorName/{Name}")
-	public ResponseEntity<DoctorClass> updateDocName(@RequestBody DoctorClass data,@PathVariable("Name") String str) {
-		return new ResponseEntity(svl.updaDocNa(data,str), HttpStatus.OK);
+	public ResponseEntity<Doctor> updateDoctorName(@Valid @RequestBody Doctor data, @PathVariable("Name") String str) {
+		return new ResponseEntity(svl.updaDoctorName(data, str), HttpStatus.OK);
 	}
+
 	@PutMapping("/updateDocAndDegName/{Name}")
-	public ResponseEntity<DoctorClass> updateDocDeg(@RequestBody DoctorClass data, @PathVariable("Name") String str){
-		return new ResponseEntity(svl.updateDoctorDeg(data, str), HttpStatus.OK);
+	public ResponseEntity<Doctor> updateDoctorAndDegreeName(@Valid @RequestBody Doctor data,
+			@PathVariable("Name") String str) {
+		return new ResponseEntity(svl.updateDoctorAndDegreeName(data, str), HttpStatus.OK);
 	}
-	
 
 }

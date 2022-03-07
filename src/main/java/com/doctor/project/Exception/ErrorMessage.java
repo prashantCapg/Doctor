@@ -1,17 +1,19 @@
-package com.doctor.project;
+package com.doctor.project.Exception;
 
+import java.time.LocalDate;
 import java.util.Date;
+
 
 public class ErrorMessage {
 	
 	private String Message;
-	private Date date;
-	public Date getDate() {
+	private LocalDate date;
+	public LocalDate getDate() {
 		return date;
 	}
 
 	public void setDate(Date date) {
-		this.date = date;
+		this.date = LocalDate.now();
 	}
 
 	public String getMessage() {
@@ -25,8 +27,10 @@ public class ErrorMessage {
 	public ErrorMessage(String message, Date date) {
 		super();
 		Message = message;
-		this.date = date;
+		this.date = LocalDate.now();
 	}
+
+	
 
 	
 	

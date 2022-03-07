@@ -1,4 +1,4 @@
-package com.doctor.project;
+package com.doctor.project.Exception;
 
 public class DegreeEmptyException extends RuntimeException{
 	/**

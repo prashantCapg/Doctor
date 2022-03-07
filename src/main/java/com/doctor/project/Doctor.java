@@ -5,20 +5,25 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name="doctorDetails")
-public class DoctorClass {
+public class Doctor {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
+	@NotEmpty(message="Name should not be empty")
+	@Size(min=3,max=20,message="Name should be 3 to 20 characters")
 	private String doctorName;
 	private String degree;
+	
 	private String specialities;
-	public DoctorClass() {
+	public Doctor() {
 		
 	}
-	public DoctorClass(Integer id, String doctorName, String degree, String specialities) {
+	public Doctor(Integer id, String doctorName, String degree, String specialities) {
 		//super();
 		this.id = id;
 		this.doctorName = doctorName;
